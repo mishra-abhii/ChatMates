@@ -1,6 +1,7 @@
 package com.example.chatmates.Fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,9 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.example.chatmates.FindFriends;
 import com.example.chatmates.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class ChatFragment extends Fragment {
@@ -46,4 +53,5 @@ public class ChatFragment extends Fragment {
         Intent intent=new Intent(getActivity(), FindFriends.class);
         startActivity(intent);
     }
+
 }
