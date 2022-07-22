@@ -47,7 +47,7 @@ public class SettingsActivity extends AppCompatActivity {
     DatabaseReference RootRef;
     StorageReference UserProfileImg,storageReference;
     String currentUser;
-    ProgressDialog progressDialog;
+//    ProgressDialog progressDialog;
     String timeUploaded,valid;
     Toolbar toolbar;
 
@@ -62,7 +62,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         auth=FirebaseAuth.getInstance();
         currentUser=auth.getCurrentUser().getUid();
-        progressDialog=new ProgressDialog(this);
+//        progressDialog=new ProgressDialog(this);
 
         RootRef= FirebaseDatabase.getInstance().getReference();
         UserProfileImg= FirebaseStorage.getInstance().getReference().child("Profile Images");
@@ -87,7 +87,7 @@ public class SettingsActivity extends AppCompatActivity {
                     }).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
 
-                            progressDialog.cancel();
+//                            progressDialog.cancel();
                             GetImage();
                             RootRef.child("Users").child(currentUser).child("image").setValue(currentUser);
 //                            Toast.makeText(getApplicationContext(), "Profile Image Uploaded", Toast.LENGTH_SHORT).show();
@@ -196,10 +196,10 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void UpdateSettings() {
 
-        progressDialog.setTitle("Update Profile");
-        progressDialog.setMessage("Please wait , while we are updating your account ...");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
+//        progressDialog.setTitle("Update Profile");
+//        progressDialog.setMessage("Please wait , while we are updating your account ...");
+//        progressDialog.setCanceledOnTouchOutside(false);
+//        progressDialog.show();
 
         String name= userName.getText().toString();
         String status= userStatus.getText().toString();
@@ -265,7 +265,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void SendUserToMainActivity() {
-        Intent intent =new Intent(SettingsActivity.this, ChatFragment.class);
+        Intent intent =new Intent(SettingsActivity.this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
