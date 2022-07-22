@@ -1,6 +1,7 @@
 package com.example.chatmates;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -37,7 +38,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    EditText username,userstatus;
+    EditText userName, userStatus;
     Button update;
     CircleImageView profileImage;
     FirebaseAuth auth;
@@ -72,19 +73,37 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                if(mImgUri != null){
+
+                    StorageReference fileReference= UserProfileImg.child(currentUser+".jpg");
+
+                    mUploadTask = fileReference.putFile(mImgUri);
+                    Task<Uri> urlTask = mUploadTask.continueWithTask(task -> {
+                        if (!task.isSuccessful()) {
+                            throw Objects.requireNonNull(task.getException());
+                        }
+                        return fileReference.getDownloadUrl();
+                    }).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+
+                            progressDialog.cancel();
+                            GetImage();
+                            RootRef.child("Users").child(currentUser).child("image").setValue(currentUser);
+//                            Toast.makeText(getApplicationContext(), "Profile Image Uploaded", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
                 if(mUploadTask != null && mUploadTask.isInProgress()){
                     Toast.makeText(SettingsActivity.this, "Updating profile pic", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    SubmitData();
+                    progressDialog.setTitle("Update Profile");
+                    progressDialog.setMessage("Please wait , while we are updating your account ...");
+                    progressDialog.setCanceledOnTouchOutside(false);
+                    progressDialog.show();
                 }
                 UpdateSettings();
-//
-//                if(!TextUtils.isEmpty(username.getText().toString()) &&
-//                        !TextUtils.isEmpty(userstatus.getText().toString())) {
-////                    SendUserToMainActivity();
-//                }
-
             }
         });
 
@@ -101,70 +120,20 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(!TextUtils.isEmpty(username.getText().toString()) &&
-                        !TextUtils.isEmpty(userstatus.getText().toString())) {
+                if(!TextUtils.isEmpty(userName.getText().toString()) &&
+                        !TextUtils.isEmpty(userStatus.getText().toString())) {
 
                     ImagePicker.launch("image/*");
-//                    UpdateSettings();
                 }
                 else
                 {
-                    username.setError("please enter user name");
-                    userstatus.setError("please enter user status");
+                    userName.setError("please enter user name");
+                    userStatus.setError("please enter user status");
                 }
             }
         });
 
-//        profileImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if(!TextUtils.isEmpty(username.getText().toString()) &&
-//                        !TextUtils.isEmpty(userstatus.getText().toString())) {
-//                    UpdateSettings();
-//                    Intent intent=new Intent();
-//                    intent.setType("image/*");
-//                    intent.setAction(Intent.ACTION_GET_CONTENT);
-//                    startActivityForResult(Intent.createChooser(intent,"Select Image from here"),
-//                            Gallery_code);
-//                }
-//                else
-//                {
-//                    username.setError("please enter user name");
-//                    userstatus.setError("please enter user status");
-//                }
-//            }
-//        });
-
         RetrieveData();
-    }
-
-    private void SubmitData(){
-
-        if(mImgUri != null){
-
-            progressDialog.setTitle("Update Profile");
-            progressDialog.setMessage("Please wait , while we are updating your account ...");
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.show();
-
-            StorageReference fileReference= UserProfileImg.child(currentUser+".jpg");
-
-            mUploadTask = fileReference.putFile(mImgUri);
-            Task<Uri> urlTask = mUploadTask.continueWithTask(task -> {
-                if (!task.isSuccessful()) {
-                    throw Objects.requireNonNull(task.getException());
-                }
-                return fileReference.getDownloadUrl();
-            }).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-
-                    progressDialog.cancel();
-                    GetImage();
-                    RootRef.child("Users").child(currentUser).child("image").setValue(currentUser);
-                    Toast.makeText(getApplicationContext(), "Profile Image Uploaded", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
     }
 
     private void RetrieveData() {
@@ -175,11 +144,11 @@ public class SettingsActivity extends AppCompatActivity {
                 {
                     if (snapshot.hasChild("name")&& snapshot.hasChild("status")&& !snapshot.hasChild("image"))
                     {
-                        username.setEnabled(false);
+                        userName.setEnabled(false);
                         String uname=snapshot.child("name").getValue().toString();
                         String ustatus=snapshot.child("status").getValue().toString();
-                        username.setText(uname);
-                        userstatus.setText(ustatus);
+                        userName.setText(uname);
+                        userStatus.setText(ustatus);
                         if (snapshot.hasChild("timeUploaded") && snapshot.hasChild("valid"))
                         {
                             timeUploaded=snapshot.child("timeUploaded").getValue().toString();
@@ -188,13 +157,13 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                     else if (snapshot.hasChild("name")&& snapshot.hasChild("status")&& snapshot.hasChild("image"))
                     {
-                        username.setEnabled(false);
+                        userName.setEnabled(false);
                         image=snapshot.child("image").getValue().toString();
                         String uname=snapshot.child("name").getValue().toString();
                         String ustatus=snapshot.child("status").getValue().toString();
                         GetImage();
-                        username.setText(uname);
-                        userstatus.setText(ustatus);
+                        userName.setText(uname);
+                        userStatus.setText(ustatus);
                         if (snapshot.hasChild("timeUploaded") && snapshot.hasChild("valid"))
                         {
                             timeUploaded=snapshot.child("timeUploaded").getValue().toString();
@@ -203,15 +172,15 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                     else
                     {
-                        username.setVisibility(View.VISIBLE);
+                        userName.setVisibility(View.VISIBLE);
                         Toast.makeText(getApplicationContext(), "Please Update your Profile", Toast.LENGTH_SHORT).show();
                     }
                 }
-                else
-                {
-                    username.setVisibility(View.VISIBLE);
-                    Toast.makeText(getApplicationContext(), "Please Update your Profile", Toast.LENGTH_SHORT).show();
-                }
+//                else
+//                {
+//                    userName.setVisibility(View.VISIBLE);
+//                    Toast.makeText(getApplicationContext(), "Please Update your Profile", Toast.LENGTH_SHORT).show();
+//                }
             }
 
             @Override
@@ -223,22 +192,23 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void UpdateSettings() {
-        String name=username.getText().toString();
-        String status=userstatus.getText().toString();
+
+        String name= userName.getText().toString();
+        String status= userStatus.getText().toString();
         if(TextUtils.isEmpty(name))
         {
-            username.setError("please enter user name");
+            userName.setError("please enter user name");
 
         }
         if(TextUtils.isEmpty(status))
         {
-            userstatus.setError("please enter user status");
+            userStatus.setError("please enter user status");
 
         }
         if(TextUtils.isEmpty(name) && TextUtils.isEmpty(status))
         {
-            username.setError("please enter user name");
-            userstatus.setError("please enter user status");
+            userName.setError("please enter user name");
+            userStatus.setError("please enter user status");
 
         }
         if(!TextUtils.isEmpty(name) && !TextUtils.isEmpty(status)) {
@@ -262,7 +232,7 @@ public class SettingsActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful())
                     {
-                        Toast.makeText(getApplicationContext(), "Data Updated", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Profile Updated", Toast.LENGTH_SHORT).show();
                     }
                     else
                     {
@@ -272,12 +242,15 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
+            Intent intent = new Intent(SettingsActivity.this , MainActivity.class);
+            startActivity(intent);
+
         }
     }
 
     private void Initialize() {
-        username=findViewById(R.id.username_edit_text);
-        userstatus=findViewById(R.id.status_edit_text);
+        userName =findViewById(R.id.username_edit_text);
+        userStatus =findViewById(R.id.status_edit_text);
         update=findViewById(R.id.update_Settings_btn);
         profileImage=findViewById(R.id.profile_image);
         toolbar=findViewById(R.id.settings_app_bar);

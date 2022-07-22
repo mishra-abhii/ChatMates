@@ -145,19 +145,18 @@ public class LogInActivity extends AppCompatActivity {
                                 });
 
                         String currentUserId = auth.getCurrentUser().getUid();
-                        UserRef.child(currentUserId).setValue("");
+                        UserRef.child(currentUserId).child("device_token").setValue(deviceToken[0]).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
 
-                        // (doubt)
-                        //this will be used somewhere as creation of "Users" node
-                        // is already done by above line of code.
-                        UserRef.child(currentUserId).child("device_token").setValue(deviceToken[0]);
+                                Intent intent =new Intent(LogInActivity.this, MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
 
-                        Intent intent =new Intent(LogInActivity.this, MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        finish();
-
-                        Toast.makeText(getApplicationContext(), "Logged in Successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Logged in Successfully", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                     else
                     {
