@@ -95,15 +95,17 @@ public class SettingsActivity extends AppCompatActivity {
                 }
 
                 if(mUploadTask != null && mUploadTask.isInProgress()){
+
                     Toast.makeText(SettingsActivity.this, "Updating profile pic", Toast.LENGTH_SHORT).show();
                 }
-                else{
-                    progressDialog.setTitle("Update Profile");
-                    progressDialog.setMessage("Please wait , while we are updating your account ...");
-                    progressDialog.setCanceledOnTouchOutside(false);
-                    progressDialog.show();
-                }
                 UpdateSettings();
+
+                if(!TextUtils.isEmpty(userName.getText().toString()) &&
+                        !TextUtils.isEmpty(userStatus.getText().toString())) {
+
+                    SendUserToMainActivity();
+                }
+
             }
         });
 
@@ -193,6 +195,11 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void UpdateSettings() {
 
+        progressDialog.setTitle("Update Profile");
+        progressDialog.setMessage("Please wait , while we are updating your account ...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
         String name= userName.getText().toString();
         String status= userStatus.getText().toString();
         if(TextUtils.isEmpty(name))
@@ -241,10 +248,6 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                 }
             });
-
-            Intent intent = new Intent(SettingsActivity.this , MainActivity.class);
-            startActivity(intent);
-
         }
     }
 
@@ -258,6 +261,13 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Account Settings");
 
+    }
+
+    private void SendUserToMainActivity() {
+        Intent intent =new Intent(SettingsActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
     // for moving to Home from settings via arrow key at action bar.
