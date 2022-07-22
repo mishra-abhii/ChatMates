@@ -13,7 +13,7 @@ import com.example.chatmates.R;
 
 public class StatusFragment extends Fragment {
 
-
+    View statusView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +24,7 @@ public class StatusFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflates the layout for this fragment
-        return inflater.inflate(R.layout.fragment_status, container, false);
+        statusView = inflater.inflate(R.layout.fragment_status, container, false);
+        return statusView;
     }
 }

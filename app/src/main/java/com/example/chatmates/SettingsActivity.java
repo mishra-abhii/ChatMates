@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.example.chatmates.Fragments.ChatFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -264,7 +265,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void SendUserToMainActivity() {
-        Intent intent =new Intent(SettingsActivity.this, MainActivity.class);
+        Intent intent =new Intent(SettingsActivity.this, ChatFragment.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
