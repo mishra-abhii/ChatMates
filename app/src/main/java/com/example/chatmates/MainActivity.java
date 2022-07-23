@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             mainViewPager.setAdapter(tabAccessorAdapter);
             setSupportActionBar(toolbar);
             tabLayout.setupWithViewPager(mainViewPager);
-            getSupportActionBar().setTitle("Whatsapp");
+            getSupportActionBar().setTitle("ChatMates");
 
             RootRef = FirebaseDatabase.getInstance().getReference();
         }

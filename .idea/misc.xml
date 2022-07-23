@@ -5,6 +5,9 @@
       <map>
         <entry key="app/src/main/res/drawable-v24/buttons.xml" value="0.1945" />
         <entry key="app/src/main/res/drawable-v24/ic_action_message.xml" value="0.1945" />
+        <entry key="app/src/main/res/drawable-v24/reciver_message_layout.xml" value="0.1945" />
+        <entry key="app/src/main/res/drawable-v24/shapebtn.xml" value="0.1945" />
+        <entry key="app/src/main/res/layout/activity_chat.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/activity_find_friends.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2078125" />
@@ -14,9 +17,11 @@
         <entry key="app/src/main/res/layout/activity_settings.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/activity_status.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/app_bar_layout.xml" value="0.2078125" />
+        <entry key="app/src/main/res/layout/custom_chat_bar.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/fragment_chat.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/fragment_request.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/fragment_status.xml" value="0.19270833333333334" />
+        <entry key="app/src/main/res/layout/message_layout.xml" value="0.302734375" />
         <entry key="app/src/main/res/layout/status_layout.xml" value="0.20677083333333332" />
         <entry key="app/src/main/res/layout/user_display_layout.xml" value="0.25" />
         <entry key="app/src/main/res/menu/options_menu.xml" value="0.2078125" />

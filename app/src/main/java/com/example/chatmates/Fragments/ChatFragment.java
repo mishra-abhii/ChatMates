@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.chatmates.ChatActivity;
 import com.example.chatmates.FindFriends;
 import com.example.chatmates.R;
 import com.example.chatmates.helper.Contacts;
