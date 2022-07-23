@@ -332,7 +332,7 @@ public class RequestFragment extends Fragment {
         storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Glide.with(requireContext()).load(uri).into(imageView);
+                Glide.with(getContext()).load(uri).into(imageView);
             }
         });
     }
