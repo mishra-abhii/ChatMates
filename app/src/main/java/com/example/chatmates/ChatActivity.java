@@ -97,7 +97,7 @@ public class ChatActivity extends AppCompatActivity {
         ConatctSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SendToPorfileActivity();
+                SendToProfileActivity();
             }
         });
         username=findViewById(R.id.custom_profile_name);
@@ -309,7 +309,7 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    private void SendToPorfileActivity() {
+    private void SendToProfileActivity() {
         Intent profileIntent=new Intent(ChatActivity.this,ProfileActivity.class);
         profileIntent.putExtra("visited_uid",msgRecId);
         startActivity(profileIntent);
