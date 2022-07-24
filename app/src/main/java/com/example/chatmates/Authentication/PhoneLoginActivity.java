@@ -161,7 +161,7 @@ public class PhoneLoginActivity extends AppCompatActivity {
 //                    String currentUserId=auth.getCurrentUser().getUid();
 //                    DatabaseReference UserRef= FirebaseDatabase.getInstance().getReference().child("Users");
 //                    UserRef.child(currentUserId).child("device_token").setValue(deviceToken);
-                    Toast.makeText(getApplicationContext(), "you are successfully logged In", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "You are Successfully Logged In", Toast.LENGTH_SHORT).show();
 
                     Intent intent =new Intent(PhoneLoginActivity.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);

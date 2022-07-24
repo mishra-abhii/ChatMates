@@ -22,14 +22,27 @@
         android:textSize="22sp"
         android:textStyle="bold" />
 
+    <ImageView
+        android:id="@+id/phonelogin_image"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_below="@id/textview"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="115dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="115dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/chat_two" />
+
+
     <EditText
         android:id="@+id/phone_number_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textview"
+        android:layout_below="@id/phonelogin_image"
         android:layout_alignParentStart="true"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="38dp"
         android:layout_marginEnd="25dp"
         android:background="@drawable/edittext"
         android:drawableStart="@drawable/phone"
