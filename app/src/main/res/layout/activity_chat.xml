@@ -58,14 +58,14 @@
 
             <ImageButton
                 android:id="@+id/send_message_chat"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
                 android:layout_gravity="center"
                 android:layout_marginEnd="15dp"
                 android:layout_weight="1"
                 android:background="@drawable/shapebtn"
-                android:backgroundTint="@color/colorPrimary"
-                android:src="@drawable/ic_baseline_send_24" />
+                android:src="@drawable/ic_baseline_send_24"
+                app:tint="@color/colorPrimary" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
