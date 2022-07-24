@@ -31,10 +31,11 @@
         android:layout_alignParentEnd="true"
         android:layout_height="wrap_content"
         android:layout_margin="5dp">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:layout_height="60dp">
+            android:layout_height="55dp"
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/file_attachment"
@@ -57,8 +58,8 @@
 
             <ImageButton
                 android:id="@+id/send_message_chat"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:layout_marginEnd="15dp"
                 android:layout_weight="1"

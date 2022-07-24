@@ -45,11 +45,12 @@
 
         </TextView>
     </LinearLayout>
+
     <Button
         android:id="@+id/contactsettings"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:background="@drawable/ic_baseline_settings_24"
         android:layout_gravity="end"
-        android:layout_marginEnd="10dp"/>
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/ic_baseline_settings_24" />
 </androidx.appcompat.widget.Toolbar>

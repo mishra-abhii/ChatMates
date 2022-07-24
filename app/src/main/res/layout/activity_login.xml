@@ -14,16 +14,16 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
 
             <ImageView
                 android:id="@+id/login_image"
-                android:layout_width="180dp"
-                android:layout_height="180dp"
+                android:layout_width="170dp"
+                android:layout_height="170dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="115dp"
-                android:layout_marginTop="36dp"
                 android:layout_marginEnd="115dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/chat">
@@ -36,14 +36,15 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/login_image"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="45dp"
-                android:layout_marginEnd="17dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="25dp"
                 android:background="@drawable/edittext"
                 android:drawableStart="@drawable/email"
+                android:gravity="center"
                 android:hint="Enter Email ..."
                 android:inputType="textEmailAddress"
-                android:padding="4dp">
+                android:padding="7dp">
 
             </EditText>
 
@@ -53,14 +54,15 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/login_email"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="25dp"
                 android:layout_marginTop="15dp"
-                android:layout_marginEnd="17dp"
+                android:layout_marginEnd="25dp"
                 android:background="@drawable/edittext"
-                android:drawableStart="@drawable/password"
+                android:drawableStart="@drawable/lock"
+                android:gravity="center"
                 android:hint="Enter Password ..."
                 android:inputType="textPassword"
-                android:padding="4dp">
+                android:padding="7dp">
 
             </EditText>
 
@@ -71,14 +73,14 @@
                 android:layout_below="@+id/login_password"
                 android:layout_alignParentStart="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="25dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="17dp"
+                android:layout_marginEnd="25dp"
                 android:padding="4dp"
                 android:text="Forgot Password ?"
-                android:textAlignment="center"
+                android:textAlignment="viewEnd"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold">
 
             </TextView>
@@ -89,12 +91,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/forgot_password"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="25dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="17dp"
+                android:layout_marginEnd="25dp"
                 android:background="@drawable/buttons"
                 android:padding="4dp"
-                android:text="LogIn"
+                android:text="Sign In"
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
@@ -109,9 +111,9 @@
                 android:layout_below="@+id/login_btn"
                 android:layout_alignParentStart="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="25dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="17dp"
+                android:layout_marginEnd="25dp"
                 android:padding="4dp"
                 android:text="Need a new Account ?"
                 android:textAlignment="center"
@@ -128,13 +130,14 @@
                 android:layout_below="@+id/needanewAccount"
                 android:layout_alignParentStart="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="25dp"
                 android:layout_marginTop="6dp"
-                android:layout_marginEnd="17dp"
+                android:layout_marginEnd="25dp"
                 android:padding="4dp"
                 android:text="or"
                 android:textAlignment="center"
-                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:textSize="17sp"
                 android:textStyle="bold">
 
             </TextView>
@@ -146,12 +149,13 @@
                 android:layout_below="@+id/phone_textView2"
                 android:layout_alignParentStart="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="25dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="17dp"
+                android:layout_marginEnd="25dp"
                 android:padding="4dp"
-                android:text="LogIn using Phone Number"
+                android:text="Sign In using Phone  "
                 android:textAlignment="center"
+                android:textColor="@android:color/black"
                 android:textSize="18sp"
                 android:textStyle="bold">
 
@@ -163,9 +167,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/phone_textView"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="25dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="17dp"
+                android:layout_marginEnd="25dp"
                 android:background="@drawable/buttons"
                 android:drawableStart="@drawable/phone"
                 android:padding="4dp"

@@ -4,7 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable-v24/buttons.xml" value="0.1945" />
+        <entry key="app/src/main/res/drawable-v24/edittext.xml" value="0.1945" />
         <entry key="app/src/main/res/drawable-v24/ic_action_message.xml" value="0.1945" />
+        <entry key="app/src/main/res/drawable-v24/ic_action_request.xml" value="0.1945" />
+        <entry key="app/src/main/res/drawable-v24/ic_baseline_attach_file_24.xml" value="0.1945" />
+        <entry key="app/src/main/res/drawable-v24/ic_baseline_send_24.xml" value="0.1945" />
         <entry key="app/src/main/res/drawable-v24/reciver_message_layout.xml" value="0.1945" />
         <entry key="app/src/main/res/drawable-v24/sender_message_layout.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-v24/shapebtn.xml" value="0.1945" />
