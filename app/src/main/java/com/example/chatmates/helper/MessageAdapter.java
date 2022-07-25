@@ -133,7 +133,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                                         "Delete for EveryOne"
                                 };
                         AlertDialog.Builder builder=new AlertDialog.Builder(holder.itemView.getContext());
-                        builder.setTitle("Delete Message");
+                        builder.setTitle("Select Action to Perform ->");
                         builder.setItems(options, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -166,7 +166,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                                         "Delete for EveryOne"
                                 };
                         AlertDialog.Builder builder=new AlertDialog.Builder(holder.itemView.getContext());
-                        builder.setTitle("Delete Message");
+                        builder.setTitle("Select Action to Perform ->");
                         builder.setItems(options, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -196,7 +196,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                                         "Delete for EveryOne"
                                 };
                         AlertDialog.Builder builder=new AlertDialog.Builder(holder.itemView.getContext());
-                        builder.setTitle("Delete Message");
+                        builder.setTitle("Select Action to Perform ->");
                         builder.setItems(options, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -239,7 +239,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                                         "Cancel",
                                 };
                         AlertDialog.Builder builder=new AlertDialog.Builder(holder.itemView.getContext());
-                        builder.setTitle("Delete Message");
+                        builder.setTitle("Select Action to Perform ->");
                         builder.setItems(options, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -265,7 +265,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                                         "Cancel",
                                 };
                         AlertDialog.Builder builder=new AlertDialog.Builder(holder.itemView.getContext());
-                        builder.setTitle("Delete Message");
+                        builder.setTitle("Select Action to Perform ->");
                         builder.setItems(options, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -289,7 +289,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
                                 };
                         AlertDialog.Builder builder=new AlertDialog.Builder(holder.itemView.getContext());
-                        builder.setTitle("Delete Message");
+                        builder.setTitle("Select Action to Perform ->");
                         builder.setItems(options, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {

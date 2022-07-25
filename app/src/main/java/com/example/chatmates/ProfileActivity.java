@@ -184,7 +184,7 @@ public class ProfileActivity extends AppCompatActivity {
                         {
                             SendMsgReq.setEnabled(true);
                             Current_state="new";
-                            SendMsgReq.setText("Send Message");
+                            SendMsgReq.setText("Send Chat Request");
                             DeclineReq.setVisibility(View.INVISIBLE);
                             DeclineReq.setEnabled(false);
                         }
@@ -289,7 +289,7 @@ public class ProfileActivity extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 SendMsgReq.setEnabled(true);
-                                                SendMsgReq.setText("Send Message");
+                                                SendMsgReq.setText("Send Chat Request");
                                                 Current_state = "new";
                                                 DeclineReq.setVisibility(View.INVISIBLE);
                                                 DeclineReq.setEnabled(false);

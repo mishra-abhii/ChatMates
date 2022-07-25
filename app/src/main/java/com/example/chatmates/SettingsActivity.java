@@ -132,6 +132,7 @@ public class SettingsActivity extends AppCompatActivity {
                 {
                     userName.setError("please enter user name");
                     userStatus.setError("please enter user status");
+                    Toast.makeText(SettingsActivity.this, "Fill the entries below before adding profile pic", Toast.LENGTH_SHORT).show();
                 }
             }
         });
