@@ -14,6 +14,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -31,6 +32,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -48,12 +51,9 @@ public class SettingsActivity extends AppCompatActivity {
     StorageReference UserProfileImg,storageReference;
     String currentUser;
 //    ProgressDialog progressDialog;
+    public static final int Gallery_code=1;
     String timeUploaded,valid;
     Toolbar toolbar;
-
-    private Uri mImgUri;
-    private ActivityResultLauncher<String> ImagePicker;
-    private UploadTask mUploadTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,32 +74,8 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(mImgUri != null){
-
-                    StorageReference fileReference= UserProfileImg.child(currentUser+".jpg");
-
-                    mUploadTask = fileReference.putFile(mImgUri);
-                    Task<Uri> urlTask = mUploadTask.continueWithTask(task -> {
-                        if (!task.isSuccessful()) {
-                            throw Objects.requireNonNull(task.getException());
-                        }
-                        return fileReference.getDownloadUrl();
-                    }).addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-
-//                            progressDialog.cancel();
-                            GetImage();
-                            RootRef.child("Users").child(currentUser).child("image").setValue(currentUser);
-//                            Toast.makeText(getApplicationContext(), "Profile Image Uploaded", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-
-                if(mUploadTask != null && mUploadTask.isInProgress()){
-
-                    Toast.makeText(SettingsActivity.this, "Updating profile pic", Toast.LENGTH_SHORT).show();
-                }
                 UpdateSettings();
+                Toast.makeText(SettingsActivity.this, "Profile Successfully Updated", Toast.LENGTH_SHORT).show();
 
                 if(!TextUtils.isEmpty(userName.getText().toString()) &&
                         !TextUtils.isEmpty(userStatus.getText().toString())) {
@@ -110,15 +86,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        ImagePicker = registerForActivityResult(new ActivityResultContracts.GetContent(),
-                new ActivityResultCallback<Uri>() {
-                    @Override
-                    public void onActivityResult(Uri result) {
-                        profileImage.setImageURI(result);
-                        mImgUri = result;
-                    }
-                });
-
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,7 +93,13 @@ public class SettingsActivity extends AppCompatActivity {
                 if(!TextUtils.isEmpty(userName.getText().toString()) &&
                         !TextUtils.isEmpty(userStatus.getText().toString())) {
 
-                    ImagePicker.launch("image/*");
+                    UpdateSettings();
+
+                    Intent intent=new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent,"Select Image from here"),
+                            Gallery_code);
                 }
                 else
                 {
@@ -239,15 +212,16 @@ public class SettingsActivity extends AppCompatActivity {
             RootRef.child("Users").child(currentUser).setValue(profileMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful())
-                    {
-                        Toast.makeText(getApplicationContext(), "Profile Updated", Toast.LENGTH_SHORT).show();
-                    }
-                    else
+                    if(!task.isSuccessful())
                     {
                         String message=task.getException().getLocalizedMessage();
                         Toast.makeText(getApplicationContext(), "Error : "+message, Toast.LENGTH_SHORT).show();
                     }
+//                    else
+//                    {
+//                        String message=task.getException().getLocalizedMessage();
+//                        Toast.makeText(getApplicationContext(), "Error : "+message, Toast.LENGTH_SHORT).show();
+//                    }
                 }
             });
         }
@@ -277,6 +251,36 @@ public class SettingsActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode==Gallery_code && resultCode==RESULT_OK && data!=null)
+        {
+            CropImage.activity(data.getData()).setGuidelines(CropImageView.Guidelines.ON).start(this);
+        }
+        if (requestCode==CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE)
+        {
+            CropImage.ActivityResult result=CropImage.getActivityResult(data);
+            if(resultCode==RESULT_OK)
+            {
+                Uri resultUri = result.getUri();
+                StorageReference filePath= UserProfileImg.child(currentUser+".jpg");
+
+                filePath.putFile(resultUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        GetImage();
+                        RootRef.child("Users").child(currentUser).child("image").setValue(currentUser);
+                        Toast.makeText(getApplicationContext(), "Profile Image Uploaded", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+            }
+        }
     }
 
     private void GetImage() {

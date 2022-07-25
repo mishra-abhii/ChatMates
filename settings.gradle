@@ -10,6 +10,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        jcenter() // This repository is going to close soon as no updates are being given to this for a long time.
     }
 }
 rootProject.name = "ChatMates"
