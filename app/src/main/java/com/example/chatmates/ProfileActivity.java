@@ -3,6 +3,7 @@ package com.example.chatmates;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.chatmates.firebase.FCMSend;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -37,11 +39,15 @@ public class ProfileActivity extends AppCompatActivity {
     Button DeclineReq,SendMsgReq;
     DatabaseReference RootRef,ChatReqRef,ContactRef,NotificationRef;
     StorageReference userProfileImageRef;
+    String receiver_fcm_token, senderName, sender_fcm_token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        SharedPreferences getSharedPreferences=getSharedPreferences("receiver_data",MODE_PRIVATE);
+        senderName = getSharedPreferences.getString("senderName","Your ChatMate");
 
         receivedUserId=getIntent().getExtras().getString("visited_uid");
         Initialize();
@@ -81,6 +87,10 @@ public class ProfileActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Please Update your Profile", Toast.LENGTH_SHORT).show();
                     }
 
+                }
+
+                if(snapshot.hasChild("fcm-token")){
+                    receiver_fcm_token = snapshot.child("fcm-token").getValue().toString();
                 }
 
             }
@@ -245,31 +255,19 @@ public class ProfileActivity extends AppCompatActivity {
                         ChatReqRef.child(receivedUserId).child(senderUserId)
                                 .child("request_type").setValue("received")
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                           @Override
-                                                           public void onComplete(@NonNull Task<Void> task) {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
 
-                                                               if (task.isSuccessful()) {
-                                                                   HashMap<String, String> chatNotificationMap = new HashMap<>();
-                                                                   chatNotificationMap.put("from", senderUserId);
-                                                                   chatNotificationMap.put("type", "request");
+                                        if (task.isSuccessful()) {
+                                            SendMsgReq.setEnabled(true);
+                                            Current_state = "request_sent";
+                                            SendMsgReq.setText("Cancel Chat Request");
+                                            FCMSend.pushNotification(ProfileActivity.this, receiver_fcm_token, senderName, "Hey! Accept my chat request");
 
-                                                                   NotificationRef.child(receivedUserId).push()
-                                                                           .setValue(chatNotificationMap)
-                                                                           .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                               @Override
-                                                                               public void onComplete(@NonNull Task<Void> task) {
-                                                                                   if (task.isSuccessful()) {
-                                                                                       SendMsgReq.setEnabled(true);
-                                                                                       Current_state = "request_sent";
-                                                                                       SendMsgReq.setText("Cancel Chat Request");
-                                                                                   }
-                                                                               }
-                                                                           });
-                                                               }
+                                        }
 
-                                                           }
-                                                       }
-                                );
+                                    }
+                                });
                     }}
                 );
 
