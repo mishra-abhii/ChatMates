@@ -34,7 +34,7 @@
         <entry key="app/src/main/res/layout/fragment_chat.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/fragment_request.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/fragment_status.xml" value="0.19270833333333334" />
-        <entry key="app/src/main/res/layout/message_layout.xml" value="0.302734375" />
+        <entry key="app/src/main/res/layout/message_layout.xml" value="0.25" />
         <entry key="app/src/main/res/layout/status_layout.xml" value="0.20677083333333332" />
         <entry key="app/src/main/res/layout/user_display_layout.xml" value="0.25" />
         <entry key="app/src/main/res/menu/options_menu.xml" value="0.2078125" />

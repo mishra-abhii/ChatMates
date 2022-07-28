@@ -218,7 +218,7 @@ public class RequestFragment extends Fragment {
                             }
                             if (type.equals("sent"))
                             {
-                                holder.Accept.setText("Req Sent");
+                                holder.Accept.setText("Request Sent");
                                 holder.Cancel.setVisibility(View.INVISIBLE);
                                 holder.reqLinearLayout.setVisibility(View.VISIBLE);
                                 UserRef.child(list_of_users).addValueEventListener(new ValueEventListener() {

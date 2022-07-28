@@ -68,6 +68,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         String userEmail=regEmail.getText().toString();
         String userPass=regPassword.getText().toString();
+
+        if(userPass.trim().length()<6){
+            regPassword.setError("Password must contain min 6 letters");
+        }
         if(TextUtils.isEmpty(userEmail))
         {
             regEmail.setError("please enter email id");
