@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,11 +17,11 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +56,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import yuku.ambilwarna.AmbilWarnaDialog;
 
 
 public class ChatActivity extends AppCompatActivity {
@@ -65,7 +67,9 @@ public class ChatActivity extends AppCompatActivity {
     TextView username , lastSeen;
     FirebaseAuth auth;
     DatabaseReference RootRef;
-    Button ConatctSettings;
+    Button ConatctSettings, changeBgColor;
+    RelativeLayout chatRelativeLayout;
+    int defaultColor;
     CircleImageView userImg;
     Uri fileuri;
     EditText message;
@@ -104,7 +108,31 @@ public class ChatActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
 
+        changeBgColor =findViewById(R.id.changeBackgroundColor);
+        chatRelativeLayout = findViewById(R.id.chatRelativeLayout);
+
+        defaultColor = ContextCompat.getColor(ChatActivity.this, R.color.colorBg);
+        changeBgColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AmbilWarnaDialog colorPicker = new AmbilWarnaDialog(ChatActivity.this, defaultColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
+                    @Override
+                    public void onCancel(AmbilWarnaDialog dialog) {
+
+                    }
+
+                    @Override
+                    public void onOk(AmbilWarnaDialog dialog, int color) {
+                        defaultColor = color;
+                        chatRelativeLayout.setBackgroundColor(defaultColor);
+                    }
+                });
+                colorPicker.show();
+            }
+        });
+
         ConatctSettings=findViewById(R.id.contactsettings);
+
         ConatctSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
