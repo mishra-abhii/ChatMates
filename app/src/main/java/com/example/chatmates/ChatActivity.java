@@ -12,9 +12,11 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.chatmates.firebase.FCMSend;
 import com.example.chatmates.helper.MessageAdapter;
 import com.example.chatmates.helper.Messages;
 import com.google.android.gms.tasks.Continuation;
@@ -53,10 +56,12 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+
 public class ChatActivity extends AppCompatActivity {
 
     ImageButton sendMsg,sendFiles;
-    String msgRecId,msRecname,msgRecImg="",messageSenderid;
+    String msgRecId,msRecname,msgRecImg="",messageSenderid, senderName;
+    String receiver_fcm_token;
     TextView username , lastSeen;
     FirebaseAuth auth;
     DatabaseReference RootRef;
@@ -74,10 +79,14 @@ public class ChatActivity extends AppCompatActivity {
     String saveCurrentTime,saveCurrentDate,checker="";
     UploadTask uploadTask;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        SharedPreferences getSharedPreferences=getSharedPreferences("receiver_data",MODE_PRIVATE);
+        senderName = getSharedPreferences.getString("senderName","Your ChatMate");
 
         auth=FirebaseAuth.getInstance();
         RootRef= FirebaseDatabase.getInstance().getReference();
@@ -86,6 +95,7 @@ public class ChatActivity extends AppCompatActivity {
         SimpleDateFormat timeFormat=new SimpleDateFormat("hh:mm a");
         saveCurrentDate=dateFormat.format(calendar.getTime());
         saveCurrentTime=timeFormat.format(calendar.getTime());
+
         msgRecId=getIntent().getExtras().get("uid").toString();
         msRecname=getIntent().getExtras().get("name").toString();
         msgRecImg=getIntent().getExtras().get("image").toString();
@@ -93,6 +103,7 @@ public class ChatActivity extends AppCompatActivity {
         toolbar=findViewById(R.id.custom_chat_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
+
         ConatctSettings=findViewById(R.id.contactsettings);
         ConatctSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +117,7 @@ public class ChatActivity extends AppCompatActivity {
         sendMsg=findViewById(R.id.send_message_chat);
         sendFiles=findViewById(R.id.file_attachment);
         messageSenderid=auth.getCurrentUser().getUid();
+
         messageAdapter=new MessageAdapter(messagesList,getApplicationContext());
         if (msgRecId!=null && msRecname!=null)
         {
@@ -243,6 +255,16 @@ public class ChatActivity extends AppCompatActivity {
                     String state = snapshot.child("userState").child("state").getValue().toString();
                     String date = snapshot.child("userState").child("date").getValue().toString();
                     String time = snapshot.child("userState").child("time").getValue().toString();
+
+
+                    SharedPreferences sharedPreferences=getSharedPreferences("stateData",MODE_PRIVATE);
+                    SharedPreferences.Editor editor=sharedPreferences.edit();
+                    editor.putString("userState", state);
+                    editor.apply();
+
+                    receiver_fcm_token = snapshot.child("fcm-token").getValue().toString();
+
+
                     if (state.equals("online")) {
                         lastSeen.setText("online");
 
@@ -270,10 +292,10 @@ public class ChatActivity extends AppCompatActivity {
     }
 
 
-
     private void SendMessage() {
 
         String messageText=message.getText().toString();
+
         if (TextUtils.isEmpty(messageText))
         {
             message.setError("Please enter a message");
@@ -300,14 +322,12 @@ public class ChatActivity extends AppCompatActivity {
             RootRef.updateChildren(messageBodyDetails);
             message.setText("");
 
-
-
-
-
-
+            // sending Push Notification
+            FCMSend.pushNotification(ChatActivity.this, receiver_fcm_token, senderName, messageText);
 
         }
     }
+
 
     private void SendToProfileActivity() {
         Intent profileIntent=new Intent(ChatActivity.this,ProfileActivity.class);

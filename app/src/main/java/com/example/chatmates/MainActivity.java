@@ -10,10 +10,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.chatmates.Authentication.LogInActivity;
 import com.example.chatmates.helper.TabAccessorAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -59,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("ChatMates");
 
             RootRef = FirebaseDatabase.getInstance().getReference();
+            getToken();
         }
         else
         {
@@ -190,6 +194,21 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void getToken(){
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(this::updateToken);
+    }
+
+    private void updateToken(String token){
+        String currentUserId= auth.getCurrentUser().getUid();
+        RootRef.child("Users").child(currentUserId).child("fcm-token").setValue(token)
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(MainActivity.this, "Unable to update token", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
     // Below written code is for Logout and Settings options
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -204,11 +223,13 @@ public class MainActivity extends AppCompatActivity {
         if (item.getItemId()==R.id.logout)
         {
             FirebaseUser currentUser=auth.getCurrentUser();
+            String currentUserId=auth.getCurrentUser().getUid();
             if (currentUser!=null)
             {
                 updateUserStatusActivity("offline");
             }
 
+            RootRef.child("Users").child(currentUserId).child("fcm-token").removeValue();
             auth.signOut();
             Intent intent =new Intent(MainActivity.this, LogInActivity.class);
             startActivity(intent);

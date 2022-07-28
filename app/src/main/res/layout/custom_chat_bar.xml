@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="65dp"
     android:background="@color/colorPrimary"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    android:layout_height="70dp">
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/custom_profile_image"
         android:layout_width="50dp"
-        android:cropToPadding="true"
-        android:layout_marginLeft="10dp"
-        android:src="@drawable/profile_image"
+        android:layout_height="60dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:id="@+id/custom_profile_image"
-        android:layout_height="60dp">
+        android:layout_marginLeft="10dp"
+        android:cropToPadding="true"
+        android:src="@drawable/profile_image">
 
     </de.hdodenhof.circleimageview.CircleImageView>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/custom_profile_name"
             android:layout_width="wrap_content"
@@ -46,11 +49,28 @@
         </TextView>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/contactsettings"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/ic_baseline_settings_24" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/changeBackgroundColor"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/ic_background_color"
+            android:backgroundTint="@color/white" />
+
+        <Button
+            android:id="@+id/contactsettings"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/ic_baseline_settings_24" />
+
+    </LinearLayout>
 </androidx.appcompat.widget.Toolbar>

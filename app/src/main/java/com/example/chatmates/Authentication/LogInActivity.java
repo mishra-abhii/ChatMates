@@ -135,28 +135,36 @@ public class LogInActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful())
                     {
-                        final String[] deviceToken = new String[1];
-                        FirebaseMessaging.getInstance().getToken()
-                                .addOnCompleteListener(new OnCompleteListener<String>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<String> task) {
-                                        deviceToken[0] = task.getResult();
-                                    }
-                                });
+                        Intent intent =new Intent(LogInActivity.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
 
-                        String currentUserId = auth.getCurrentUser().getUid();
-                        UserRef.child(currentUserId).child("device_token").setValue(deviceToken[0]).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(getApplicationContext(), "Logged in Successfully", Toast.LENGTH_SHORT).show();
 
-                                Intent intent =new Intent(LogInActivity.this, MainActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                                finish();
 
-                                Toast.makeText(getApplicationContext(), "Logged in Successfully", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+//                        final String[] deviceToken = new String[1];
+//                        FirebaseMessaging.getInstance().getToken()
+//                                .addOnCompleteListener(new OnCompleteListener<String>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<String> task) {
+//                                        deviceToken[0] = task.getResult();
+//                                    }
+//                                });
+//
+//                        String currentUserId = auth.getCurrentUser().getUid();
+//                        UserRef.child(currentUserId).child("device_token").setValue(deviceToken[0]).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<Void> task) {
+//
+//                                Intent intent =new Intent(LogInActivity.this, MainActivity.class);
+//                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                startActivity(intent);
+//                                finish();
+//
+//                                Toast.makeText(getApplicationContext(), "Logged in Successfully", Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
                     }
                     else
                     {

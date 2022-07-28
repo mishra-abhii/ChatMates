@@ -96,22 +96,22 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful())
                             {
-                                final String[] deviceToken = new String[1];
-                                FirebaseMessaging.getInstance().getToken()
-                                        .addOnCompleteListener(new OnCompleteListener<String>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<String> task) {
-                                                deviceToken[0] = task.getResult();
-                                            }
-                                        });
-
-                                String currentUserId = auth.getCurrentUser().getUid();
-                                RootRef.child("Users").child(currentUserId).setValue("");
+//                                final String[] deviceToken = new String[1];
+//                                FirebaseMessaging.getInstance().getToken()
+//                                        .addOnCompleteListener(new OnCompleteListener<String>() {
+//                                            @Override
+//                                            public void onComplete(@NonNull Task<String> task) {
+//                                                deviceToken[0] = task.getResult();
+//                                            }
+//                                        });
+//
+//                                String currentUserId = auth.getCurrentUser().getUid();
+//                                RootRef.child("Users").child(currentUserId).setValue("");
 
                                 // (doubt)
                                 //this will be used somewhere as creation of "Users" node
                                 // is already done by above line of code.
-                                RootRef.child("Users").child(currentUserId).child("device_token").setValue(deviceToken[0]);
+//                                RootRef.child("Users").child(currentUserId).child("device_token").setValue(deviceToken[0]);
 
                                 Intent intent =new Intent(RegisterActivity.this, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);

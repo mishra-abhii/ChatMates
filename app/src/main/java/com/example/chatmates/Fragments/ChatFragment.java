@@ -91,69 +91,64 @@ public class ChatFragment extends Fragment {
             @Override
             protected void onBindViewHolder(@NonNull ChatViewHolder holder, int position, @NonNull Contacts model) {
                 String userid=getRef(position).getKey();
-                final String[] image = {""};
-                final String[] name = {""};
-                UserRef.child(userid).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.hasChild("image"))
-                        {
-                            image[0] =snapshot.child("image").getValue().toString();
-                            GetImage(image[0], holder.profileImage );
 
-                        }
-                        name[0] =snapshot.child("name").getValue().toString();
-                        holder.lastSeen.setText("Date"+"Time");
-                        holder.userName.setText(name[0]);
-                        holder.userStatus.setText(snapshot.child("status").getValue().toString());
-                        holder.lastSeen.setVisibility(View.VISIBLE);
-                        if (snapshot.child("userState").hasChild("state"))
-                        {
-                            String state=snapshot.child("userState").child("state").getValue().toString();
-                            date=snapshot.child("userState").child("date").getValue().toString();
-                            time=snapshot.child("userState").child("time").getValue().toString();
-                            if (state.equals("online"))
-                            {
-                                holder.lastSeen.setVisibility(View.INVISIBLE);
-                                holder.online.setVisibility(View.VISIBLE);
+                if(userid != null) {
+                    final String[] image = {""};
+                    final String[] name = {""};
+                    UserRef.child(userid).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.hasChild("image")) {
+                                image[0] = snapshot.child("image").getValue().toString();
+                                GetImage(image[0], holder.profileImage);
 
                             }
-                            else if (state.equals("offline"))
-                            {
-                                holder.lastSeen.setVisibility(View.VISIBLE);
-                                holder.online.setVisibility(View.INVISIBLE);
-                                Calendar calendar=Calendar.getInstance();
-                                SimpleDateFormat dateFormat=new SimpleDateFormat("MMM dd,yyyy");
-                                CurrentDate=dateFormat.format(calendar.getTime());
-                                if (CurrentDate.equals(date))
-                                {
-                                    holder.lastSeen.setText(time.toLowerCase(Locale.ROOT));
+                            name[0] = snapshot.child("name").getValue().toString();
+                            holder.lastSeen.setText("Date" + "Time");
+                            holder.userName.setText(name[0]);
+                            holder.userStatus.setText(snapshot.child("status").getValue().toString());
+                            holder.lastSeen.setVisibility(View.VISIBLE);
+                            if (snapshot.child("userState").hasChild("state")) {
+                                String state = snapshot.child("userState").child("state").getValue().toString();
+                                date = snapshot.child("userState").child("date").getValue().toString();
+                                time = snapshot.child("userState").child("time").getValue().toString();
+                                if (state.equals("online")) {
+                                    holder.lastSeen.setVisibility(View.INVISIBLE);
+                                    holder.online.setVisibility(View.VISIBLE);
+
+                                } else if (state.equals("offline")) {
+                                    holder.lastSeen.setVisibility(View.VISIBLE);
+                                    holder.online.setVisibility(View.INVISIBLE);
+                                    Calendar calendar = Calendar.getInstance();
+                                    SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd,yyyy");
+                                    CurrentDate = dateFormat.format(calendar.getTime());
+                                    if (CurrentDate.equals(date)) {
+                                        holder.lastSeen.setText(time.toLowerCase(Locale.ROOT));
+
+                                    } else {
+                                        holder.lastSeen.setText(date);
+                                    }
 
                                 }
-                                else
-                                {
-                                    holder.lastSeen.setText(date);
+                            }
+                            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent chat = new Intent(getActivity(), ChatActivity.class);
+                                    chat.putExtra("uid", userid);
+                                    chat.putExtra("name", name[0]);
+                                    chat.putExtra("image", image[0]);
+                                    startActivity(chat);
                                 }
-
-                            }
+                            });
                         }
-                        holder.itemView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent chat=new Intent(getActivity(), ChatActivity.class);
-                                chat.putExtra("uid",userid);
-                                chat.putExtra("name",name[0]);
-                                chat.putExtra("image",image[0]);
-                                startActivity(chat);
-                            }
-                        });
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
+                        }
+                    });
+                }
             }
 
             @NonNull

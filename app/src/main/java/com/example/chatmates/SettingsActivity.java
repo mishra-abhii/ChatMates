@@ -2,6 +2,7 @@ package com.example.chatmates;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -176,6 +177,12 @@ public class SettingsActivity extends AppCompatActivity {
 //        progressDialog.show();
 
         String name= userName.getText().toString();
+
+        SharedPreferences sharedPreferences=getSharedPreferences("receiver_data",MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString("senderName", name);
+        editor.apply();
+
         String status= userStatus.getText().toString();
         if(TextUtils.isEmpty(name))
         {
