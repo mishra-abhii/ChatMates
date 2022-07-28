@@ -115,19 +115,19 @@ public class ChatActivity extends AppCompatActivity {
         changeBgColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AmbilWarnaDialog colorPicker = new AmbilWarnaDialog(ChatActivity.this, defaultColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
-                    @Override
-                    public void onCancel(AmbilWarnaDialog dialog) {
+               AmbilWarnaDialog coloPicker = new AmbilWarnaDialog(ChatActivity.this, defaultColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
+                   @Override
+                   public void onCancel(AmbilWarnaDialog dialog) {
 
-                    }
-
-                    @Override
-                    public void onOk(AmbilWarnaDialog dialog, int color) {
-                        defaultColor = color;
-                        chatRelativeLayout.setBackgroundColor(defaultColor);
-                    }
-                });
-                colorPicker.show();
+                   }
+                   @Override
+                   public void onOk(AmbilWarnaDialog dialog, int color) {
+                       defaultColor = color;
+                       chatRelativeLayout.setBackgroundColor(defaultColor);
+                       RootRef.child("Users").child(msgRecId).child("chatBgColor").setValue(defaultColor);
+                   }
+               });
+               coloPicker.show();
             }
         });
 
@@ -223,7 +223,6 @@ public class ChatActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         updateUserStatus("online");
-
     }
 
     @Override
@@ -291,6 +290,11 @@ public class ChatActivity extends AppCompatActivity {
                     editor.apply();
 
                     receiver_fcm_token = snapshot.child("fcm-token").getValue().toString();
+                    if(snapshot.hasChild("chatBgColor")) {
+                        String bgColor = snapshot.child("chatBgColor").getValue().toString();
+                        chatRelativeLayout.setBackgroundColor(Integer.parseInt(bgColor));
+                    }
+
 
 
                     if (state.equals("online")) {
@@ -411,6 +415,8 @@ public class ChatActivity extends AppCompatActivity {
                         RootRef.updateChildren(messageBodyDetails);
                         message.setText("");
                         progressDialog.dismiss();
+
+                        FCMSend.pushNotification(ChatActivity.this, receiver_fcm_token, senderName, "Pdf/Docx");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -465,6 +471,8 @@ public class ChatActivity extends AppCompatActivity {
                         RootRef.updateChildren(messageBodyDetails);
                         message.setText("");
                         progressDialog.dismiss();
+
+                        FCMSend.pushNotification(ChatActivity.this, receiver_fcm_token, senderName, "Image");
                     }
                 });
 
