@@ -2,6 +2,8 @@ package com.example.chatmates.helper;
 
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,6 +36,8 @@ import com.google.firebase.storage.StorageReference;
 import java.util.List;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
+
+    private static final CharSequence COPY_MESSAGE = "copiedMessage";
     List<Messages> userMessageLIST;
     FirebaseAuth auth;
     DatabaseReference userRef;
@@ -163,6 +167,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                                 {
                                         "Delete for Me",
                                         "Cancel",
+                                        "Copy",
                                         "Delete for EveryOne"
                                 };
                         AlertDialog.Builder builder=new AlertDialog.Builder(holder.itemView.getContext());
@@ -176,7 +181,17 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                                     Intent intent=new Intent(holder.itemView.getContext(), MainActivity.class);
                                     holder.itemView.getContext().startActivity(intent);
                                 }
-                                if (i==2)
+
+                                if (i==2){
+                                   // Below code is used to copy the list to clipboard
+                                    ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                                    ClipData clip = ClipData.newPlainText(COPY_MESSAGE, messages.getMessage());
+                                    clipboard.setPrimaryClip(clip);
+
+                                    Toast.makeText(view.getContext(), "Message copied", Toast.LENGTH_SHORT).show();
+                                }
+
+                                if (i==3)
                                 {
                                     deleteMessageForeEveryOne(position,holder);
                                     Intent intent=new Intent(holder.itemView.getContext(), MainActivity.class);
@@ -261,6 +276,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                     {
                         CharSequence options[]=new CharSequence[]
                                 {
+                                        "Copy",
                                         "Delete for Me",
                                         "Cancel",
                                 };
@@ -269,7 +285,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                         builder.setItems(options, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                if (i==0)
+
+                                if (i==0){
+                                    ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                                    ClipData clip = ClipData.newPlainText(COPY_MESSAGE, messages.getMessage());
+                                    clipboard.setPrimaryClip(clip);
+
+                                    Toast.makeText(view.getContext(), "Message copied", Toast.LENGTH_SHORT).show();
+                                }
+                                if (i==1)
                                 {
                                     deleteReceiverMessageForeMe(position,holder);
                                     Intent intent=new Intent(holder.itemView.getContext(), MainActivity.class);
@@ -326,7 +350,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful())
                         {
-                            Toast.makeText(holder.itemView.getContext(), "Message Deleted Successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(holder.itemView.getContext(), "Message Deleted", Toast.LENGTH_SHORT).show();
                         }
                         else
                         {
@@ -348,7 +372,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful())
                         {
-                            Toast.makeText(holder.itemView.getContext(), "Message Deleted Successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(holder.itemView.getContext(), "Message Deleted", Toast.LENGTH_SHORT).show();
                         }
                         else
                         {
@@ -375,7 +399,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful())
                         {
-                            Toast.makeText(holder.itemView.getContext(), "Message Deleted Successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(holder.itemView.getContext(), "Message Deleted", Toast.LENGTH_SHORT).show();
                         }
                         else
                         {

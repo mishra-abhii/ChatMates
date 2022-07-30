@@ -47,11 +47,21 @@
                 android:background="@android:color/background_light"
                 android:src="@drawable/ic_baseline_attach_file_24" />
 
+            <ImageButton
+                android:id="@+id/btnSendLocation"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/white"
+                android:tint="@color/colorPrimary"
+                app:srcCompat="@drawable/ic_baseline_location_on_24" />
+
             <EditText
                 android:id="@+id/chat_input_message"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginEnd="10dp"
                 android:layout_weight="50"
                 android:hint="Enter message .."
@@ -62,7 +72,7 @@
                 android:layout_width="52dp"
                 android:layout_height="52dp"
                 android:layout_gravity="center"
-                android:layout_marginEnd="15dp"
+                android:layout_marginEnd="12dp"
                 android:layout_weight="1"
                 android:background="@drawable/shapebtn"
                 android:src="@drawable/ic_baseline_send_24"

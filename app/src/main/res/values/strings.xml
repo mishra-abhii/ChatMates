@@ -19,4 +19,5 @@
     <string name="cancelchatreq">Cancel Chat Request</string>
     <string name="cancel_chat_request">Cancel Chat Request</string>
     <string name="type_message">type message here...</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>

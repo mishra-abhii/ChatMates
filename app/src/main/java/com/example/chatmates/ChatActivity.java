@@ -13,10 +13,13 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +32,13 @@ import com.bumptech.glide.Glide;
 import com.example.chatmates.firebase.FCMSend;
 import com.example.chatmates.helper.MessageAdapter;
 import com.example.chatmates.helper.Messages;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.Priority;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -54,6 +64,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import yuku.ambilwarna.AmbilWarnaDialog;
@@ -68,6 +79,7 @@ public class ChatActivity extends AppCompatActivity {
     FirebaseAuth auth;
     DatabaseReference RootRef;
     Button ConatctSettings, changeBgColor;
+    ImageButton btnSendLocation;
     RelativeLayout chatRelativeLayout;
     int defaultColor;
     CircleImageView userImg;
@@ -82,12 +94,18 @@ public class ChatActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     String saveCurrentTime,saveCurrentDate,checker="";
     UploadTask uploadTask;
+    String latitude, longitude;
+
+    LocationManager locationManager;
+    private static final int REQUEST_CHECK_SETTINGS = 0x1;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         SharedPreferences getSharedPreferences=getSharedPreferences("receiver_data",MODE_PRIVATE);
         senderName = getSharedPreferences.getString("senderName","Your ChatMate");
@@ -144,7 +162,7 @@ public class ChatActivity extends AppCompatActivity {
         userImg=findViewById(R.id.custom_profile_image);
         sendMsg=findViewById(R.id.send_message_chat);
         sendFiles=findViewById(R.id.file_attachment);
-        messageSenderid=auth.getCurrentUser().getUid();
+        messageSenderid= Objects.requireNonNull(auth.getCurrentUser()).getUid();
 
         messageAdapter=new MessageAdapter(messagesList,getApplicationContext());
         if (msgRecId!=null && msRecname!=null)
@@ -163,6 +181,55 @@ public class ChatActivity extends AppCompatActivity {
                 SendMessage();
             }
         });
+
+        btnSendLocation = findViewById(R.id.btnSendLocation);
+        btnSendLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                    Toast.makeText(ChatActivity.this, "GPS is ON", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ChatActivity.this, MapsActivity.class);
+                    startActivity(intent);
+
+                    getCurrentLocation();
+                }
+                else{
+                    LocationRequest locationRequest = LocationRequest.create();
+                    locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY);
+                    locationRequest.setInterval(10000);
+                    locationRequest.setFastestInterval(10000/2);
+
+                    LocationSettingsRequest.Builder locationSettingsRequestBuilder = new LocationSettingsRequest.Builder();
+
+                    locationSettingsRequestBuilder.addLocationRequest(locationRequest);
+                    locationSettingsRequestBuilder.setAlwaysShow(true);
+
+                    SettingsClient settingsClient = LocationServices.getSettingsClient(ChatActivity.this);
+
+                    Task<LocationSettingsResponse> task = settingsClient.checkLocationSettings(locationSettingsRequestBuilder.build());
+
+                    task.addOnFailureListener(ChatActivity.this, new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            if(e instanceof ResolvableApiException){
+
+                                try {
+                                    ResolvableApiException resolvableApiException = (ResolvableApiException) e;
+                                    resolvableApiException.startResolutionForResult(ChatActivity.this,
+                                            REQUEST_CHECK_SETTINGS);
+                                }
+                                catch (IntentSender.SendIntentException ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+
         linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
         recyclerView=findViewById(R.id.chat_recycler_view);
@@ -217,6 +284,33 @@ public class ChatActivity extends AppCompatActivity {
         });
         setRecyclerView();
 
+    }
+
+    private void getCurrentLocation(){
+
+        RootRef.child("Location").child(messageSenderid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.hasChild("latitude") && snapshot.hasChild("longitude")){
+                    latitude = Objects.requireNonNull(snapshot.child("latitude").getValue()).toString();
+                    longitude = Objects.requireNonNull(snapshot.child("longitude").getValue()).toString();
+
+                    message.setText(new StringBuilder().append("Latitude : ").append(latitude).append("\n").append("Longitude : ").append(longitude).toString());
+
+
+                    RootRef.child("Location").child(messageSenderid).child("latitude").removeValue();
+                    RootRef.child("Location").child(messageSenderid).child("longitude").removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+//
+//        RootRef.child("Location").child(messageSenderid).child("latitude").removeValue();
+//        RootRef.child("Location").child(messageSenderid).child("longitude").removeValue();
     }
 
     @Override
@@ -289,7 +383,10 @@ public class ChatActivity extends AppCompatActivity {
                     editor.putString("userState", state);
                     editor.apply();
 
-                    receiver_fcm_token = snapshot.child("fcm-token").getValue().toString();
+                    if(snapshot.hasChild("fcm-token")) {
+                        receiver_fcm_token = snapshot.child("fcm-token").getValue().toString();
+                    }
+
                     if(snapshot.hasChild("chatBgColor")) {
                         String bgColor = snapshot.child("chatBgColor").getValue().toString();
                         chatRelativeLayout.setBackgroundColor(Integer.parseInt(bgColor));
@@ -481,7 +578,7 @@ public class ChatActivity extends AppCompatActivity {
         else
         {
             progressDialog.dismiss();
-            Toast.makeText(getApplicationContext(), "Nothing is Selected", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "Nothing is Selected", Toast.LENGTH_SHORT).show();
         }
     }
 
